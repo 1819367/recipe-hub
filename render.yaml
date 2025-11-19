@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: recipe-hub
+    env: python
+    plan: free
+    buildCommand: ./build.sh
+    startCommand: gunicorn server.app:app -b 0.0.0.0:$PORT
+    envVars:
+      PYTHON_VERSION: 3.11.6
+
+preDeployCommand: ./pre-deploy.sh
