@@ -1,28 +1,21 @@
-from flask import Flask
+from flask import Flask, send_from_directory, jsonify
 from flask_cors import CORS
-from flask_sqlalchemy import SQLAlchemy
-from flask_migrate import Migrate
-from flask import send_from_directory
 import os
 
-app = Flask(__name__)
-CORS(app)  # Allow Vite during development
+app = Flask(__name__, static_folder='static', template_folder='templates')
+CORS(app)
 
-# Database: SQLite locally, Postgres on Render
+# Database config (we'll add SQLAlchemy later when it works)
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 if os.environ.get('DATABASE_URL'):
-    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ['DATABASE_URL'].replace('postgres://', 'postgresql://')
+    app.config['SQLALCHEMY_DATABASE_URI'] = os.environ.get('DATABASE_URL').replace('postgres://', 'postgresql://')
 else:
     app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///app.db'
 
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
-db = SQLAlchemy(app)
-migrate = Migrate(app, db)
-
-# Import routes after app/db exist
+# Import routes AFTER app is created
 from routes import *
 
-# === PRODUCTION: Serve React build ===
+# PRODUCTION: Serve React on Render
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def serve_react(path):
