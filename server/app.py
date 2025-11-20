@@ -21,13 +21,12 @@ else:
 # Import routes AFTER app is created
 from routes import *
 
-# PRODUCTION: Serve React build 
-@app.route('/', defaults={'path': ''})
-@app.route('/<path:path>')
-def catch_all(path):
-    if path != "" and os.path.exists(os.path.join(app.static_folder, path)):
-        return send_from_directory(app.static_folder, path)
-    return send_from_directory(app.static_folder, 'index.html')
+# PRODUCTION: Serve React build on Render
+try:
+    from production import add_production_routes
+    add_production_routes(app)
+except ImportError:
+    pass  # Local dev — no problem
 
 if __name__ == '__main__':
     app.run(debug=True)
