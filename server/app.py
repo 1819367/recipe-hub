@@ -21,10 +21,10 @@ else:
 # Import routes AFTER app is created
 from routes import *
 
-# PRODUCTION: Serve React on Render
+# PRODUCTION: Serve React build 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
-def serve_react(path):
+def catch_all(path):
     if path != "" and os.path.exists(os.path.join(app.static_folder, path)):
         return send_from_directory(app.static_folder, path)
     return send_from_directory(app.static_folder, 'index.html')
