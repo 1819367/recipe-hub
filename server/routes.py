@@ -1,6 +1,6 @@
 from app import app
+from flask import jsonify   # better to use jsonify for JSON responses
 
-# API routes will go here later
 @app.route('/api/test')
 def test():
-    return {"message": "Flask backend is working!"}
+    return jsonify({"message": "Flask backend is working!"})
