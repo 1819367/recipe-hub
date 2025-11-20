@@ -1,6 +1,10 @@
 from flask import Flask, send_from_directory, jsonify
 from flask_cors import CORS
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 import os
+import sys
+sys.path.append(os.path.dirname(os.path.realpath(__file__)))  
 
 app = Flask(__name__, static_folder='static', template_folder='templates')
 CORS(app)
