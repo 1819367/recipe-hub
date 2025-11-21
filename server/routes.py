@@ -1,4 +1,4 @@
-from app import app
+from server.app.main import app
 from flask import jsonify   # better to use jsonify for JSON responses
 
 @app.route('/api/test')
