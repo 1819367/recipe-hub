@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'  // ← ADD useState
-//import Header from './Header'                 // ← ADD if you have Header component
+import Header from './components/Header'                 // ← ADD if you have Header component
 import './App.css'
 
 function App() {
@@ -26,7 +26,7 @@ useEffect(() => {
 
   return (
     <div className='recipe-app'>
-      {/* <Header /> */}
+      <Header />
       <p>Your recipes here!</p>
       <p>API Message: {message}</p>  {/* ← DISPLAY THE RESULT */}
     </div>
