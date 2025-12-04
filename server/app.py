@@ -16,6 +16,10 @@ app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 db.init_app(app)  
 
+# Force table creation on startup (Render fix)
+with app.app_context():
+    db.create_all()
+
 @app.route("/api/hello")
 def hello():
     return jsonify({"message": "Hello from Flask!"})
