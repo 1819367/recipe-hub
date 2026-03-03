@@ -1,34 +1,77 @@
-import { useEffect, useState } from 'react'  // ← ADD useState
-import Header from './components/Header'                 // ← ADD if you have Header component
-import './App.css'
+import { useEffect, useState } from "react";
+import Header from "./components/Header";
+import "./App.css";
 
 function App() {
-  const [message, setMessage] = useState("Loading...");  // ← ADD THIS STATE
+  // State for the hello message
+  const [message, setMessage] = useState("Loading...");
+  // State for recipes
+  const [recipes, setRecipes] = useState([]);
 
-useEffect(() => {
-  const fetchMessage = async () => {
-    try {
-      console.log("🔄 Fetching from:", import.meta.env.VITE_API_BASE_URL + "/api/hello");
-      const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/api/hello`);
-      console.log("📡 Response status:", res.status, res.statusText);
-      console.log("📡 Response ok?", res.ok);
-      if (!res.ok) throw new Error(`HTTP ${res.status}`);
-      const data = await res.json();
-      console.log("✅ Data received:", data);
-      setMessage(data.message);
-    } catch (err) {
-      console.error("❌ Fetch error:", err);
-      setMessage("Error: " + err.message);
-    }
-  };
-  fetchMessage();
-}, []);
+  // Fetch hello message
+  useEffect(() => {
+    const fetchMessage = async () => {
+      try {
+        const base = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:5000";
+        console.log("🔄 Fetching HELLO from:", base + "/api/hello");
+        const res = await fetch(`${base}/api/hello`);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        setMessage(data.message);
+      } catch (err) {
+        console.error("❌ Fetch error (hello):", err);
+        setMessage("Error: " + err.message);
+      }
+    };
+    fetchMessage();
+  }, []);
+
+  // Fetch recipes
+  useEffect(() => {
+    const fetchRecipes = async () => {
+      try {
+        const base = import.meta.env.VITE_API_BASE_URL || "http://127.0.0.1:5000";
+        console.log("🔄 Fetching RECIPES from:", base + "/api/recipes");
+        const res = await fetch(`${base}/api/recipes`);
+        if (!res.ok) throw new Error(`HTTP ${res.status}`);
+        const data = await res.json();
+        console.log("✅ Recipes received:", data);
+        setRecipes(data);
+      } catch (err) {
+        console.error("❌ Fetch error (recipes):", err);
+      }
+    };
+    fetchRecipes();
+  }, []);
 
   return (
-    <div className='recipe-app'>
+    <div className="recipe-app">
       <Header />
+
       <p>Your recipes here!</p>
-      <p>API Message: {message}</p>  {/* ← DISPLAY THE RESULT */}
+      <p>API Message: {message}</p>
+
+      <h2>Recipes</h2>
+      {recipes.length === 0 ? (
+        <p>No recipes yet.</p>
+      ) : (
+        <ul className="recipe-list">
+          {recipes.map((recipe) => (
+            <li key={recipe.id} className="recipe-card">
+              <h3>{recipe.title}</h3>
+              <img
+                src={recipe.image_url}
+                alt={recipe.title}
+                style={{ width: "200px", height: "auto" }}
+              />
+              <p>{recipe.description}</p>
+              <p>
+                <strong>Servings:</strong> {recipe.servings}
+              </p>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }
