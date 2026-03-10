@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import Header from "./components/Header";
+import RecipeExcerpt from "./components/RecipeExcerpts";
 import "./App.css";
 
 function App() {
@@ -48,30 +49,14 @@ function App() {
     <div className="recipe-app">
       <Header />
 
-      <p>Your recipes here!</p>
-      <p>API Message: {message}</p>
-
-      <h2>Recipes</h2>
-      {recipes.length === 0 ? (
-        <p>No recipes yet.</p>
-      ) : (
-        <ul className="recipe-list">
-          {recipes.map((recipe) => (
-            <li key={recipe.id} className="recipe-card">
-              <h3>{recipe.title}</h3>
-              <img
-                src={recipe.image_url}
-                alt={recipe.title}
-                style={{ width: "200px", height: "auto" }}
-              />
-              <p>{recipe.description}</p>
-              <p>
-                <strong>Servings:</strong> {recipe.servings}
-              </p>
-            </li>
-          ))}
-        </ul>
-      )}
+      <div className="recipe-list">
+        {recipes.map(recipe => (
+          <RecipeExcerpt
+            key={recipe.id}
+            recipe={recipe}
+          />
+        ))}
+      </div>
     </div>
   );
 }
