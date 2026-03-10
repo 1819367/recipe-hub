@@ -55,6 +55,42 @@ def recipes():
             'recipe': new_recipe.to_dict()
         }), 201
 
+@app.route('/api/recipes/<int:recipe_id>', methods=['PUT'])
+def update_recipe(recipe_id):
+    recipe = Recipe.query.get(recipe_id)
+    if not recipe:
+        return jsonify({'error': 'Recipe not found'}), 404
+    
+    data = request.get_json()
+    
+    # Update all fields
+    recipe.title = data.get('title', recipe.title)
+    recipe.ingredients = data.get('ingredients', recipe.ingredients)
+    recipe.instructions = data.get('instructions', recipe.instructions)
+    recipe.servings = data.get('servings', recipe.servings)
+    recipe.description = data.get('description', recipe.description)
+    recipe.image_url = data.get('image_url', recipe.image_url)
+    
+    db.session.commit()
+    
+    return jsonify({
+        'message': 'Recipe updated successfully',
+        'recipe': recipe.to_dict()
+    }), 200
+
+@app.route('/api/recipes/<int:recipe_id>', methods=['DELETE'])
+def delete_recipe(recipe_id):
+    recipe = Recipe.query.get(recipe_id)
+    if not recipe:
+        return jsonify({'error': 'Recipe not found'}), 404
+    
+    db.session.delete(recipe)
+    db.session.commit()
+
+    return jsonify({
+        'message': 'Recipe deleted successfully',
+    }), 200
+
 # @app.route("/api/seed")
 # def seed_data():
 #     """Add sample recipes to database (run ONCE)"""
