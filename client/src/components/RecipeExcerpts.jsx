@@ -1,4 +1,5 @@
-const RecipeExcerpt = ({ recipe }) => {
+const RecipeExcerpt = ({ recipe, handleSelectRecipe }) => {
+    console.log(handleSelectRecipe)
     return (
         <article className="recipe-card">
             <figure>
@@ -11,7 +12,7 @@ const RecipeExcerpt = ({ recipe }) => {
             <p className="flex-spacing">
                 Description: {recipe.description}
             </p>
-            <button>View</button>
+            <button onClick={() => handleSelectRecipe(recipe)}>View</button>
         </article>
     )
 }

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import Header from "./components/Header";
 import RecipeExcerpt from "./components/RecipeExcerpts";
+import RecipeFull from "./components/RecipeFull"
 import "./App.css";
 
 function App() {
@@ -8,6 +9,8 @@ function App() {
   const [message, setMessage] = useState("Loading...");
   // State for recipes
   const [recipes, setRecipes] = useState([]);
+  // State for selected recipe
+  const [selectedRecipe, setSelectedRecipe] = useState(null);
 
   // Fetch hello message
   useEffect(() => {
@@ -45,18 +48,36 @@ function App() {
     fetchRecipes();
   }, []);
 
+  const handleSelectRecipe = (recipe) => {
+    setSelectedRecipe(recipe);
+  };
+
+  const handleUnselectRecipe = () => {
+    setSelectedRecipe(null);
+  };
+
   return (
     <div className="recipe-app">
       <Header />
 
-      <div className="recipe-list">
-        {recipes.map(recipe => (
-          <RecipeExcerpt
-            key={recipe.id}
-            recipe={recipe}
+      {selectedRecipe && (
+        <RecipeFull 
+          selectedRecipe={selectedRecipe} 
+          handleUnselectRecipe={handleUnselectRecipe} 
+        />
+      )}
+
+      {!selectedRecipe && (
+        <div className='recipe-list'>
+          {recipes.map((recipe) => (
+            <RecipeExcerpt 
+            key={recipe.id} 
+            recipe={recipe} 
+            handleSelectRecipe={handleSelectRecipe} 
           />
-        ))}
-      </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
